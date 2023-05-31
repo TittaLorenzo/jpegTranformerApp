@@ -7,10 +7,12 @@ package com.mycompany.jpegtransformerappv1;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -67,7 +69,7 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
 
         jLabelPathImage.setText("Scegli l'immagine (.bmp) da elaborare:");
 
-        jButtonPathImage.setText("Immagine");
+        jButtonPathImage.setText("Browse");
         jButtonPathImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonPathImageActionPerformed(evt);
@@ -155,10 +157,22 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
 
         jLabelAmpiezza.setText("Scegliere ampiezza finestra:");
 
+        jTextFieldAmpiezza.setText("1");
+        jTextFieldAmpiezza.setToolTipText("");
         jTextFieldAmpiezza.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jTextFieldAmpiezza.setName(""); // NOI18N
+        jTextFieldAmpiezza.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                CheckAmpiezza(evt);
+            }
+        });
 
         jButtonAmpiezzaMeno.setText("-");
+        jButtonAmpiezzaMeno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAmpiezzaMenoActionPerformed(evt);
+            }
+        });
 
         jButtonAmpiezzaPiu.setText("+");
         jButtonAmpiezzaPiu.addActionListener(new java.awt.event.ActionListener() {
@@ -169,10 +183,26 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
 
         jLabelTaglio.setText("Scegliere taglio frequenza:");
 
+        jTextFieldTaglio.setText("0");
         jTextFieldTaglio.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jTextFieldTaglio.setName(""); // NOI18N
+        jTextFieldTaglio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldTaglioActionPerformed(evt);
+            }
+        });
+        jTextFieldTaglio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                checkTaglio(evt);
+            }
+        });
 
         jButtonTaglioMeno.setText("-");
+        jButtonTaglioMeno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonTaglioMenoActionPerformed(evt);
+            }
+        });
 
         jButtonTaglioPiu.setText("+");
         jButtonTaglioPiu.addActionListener(new java.awt.event.ActionListener() {
@@ -271,11 +301,13 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
             //codice che inserisce immagine nel textfield e nella variabile imagePath
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setCurrentDirectory(new File("."));
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "BMP Images", "bmp");
+            fileChooser.setFileFilter(filter);
             int response = fileChooser.showOpenDialog(null);
             if (response == JFileChooser.APPROVE_OPTION) {
-                File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
                 imagePath = fileChooser.getSelectedFile().getAbsolutePath();
-
+                File file = new File(imagePath);
                 //resize dell'immagine
                 BufferedImage img = null;
                 try {
@@ -283,6 +315,9 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                
+                int n = Integer.parseInt(jTextFieldAmpiezza.getText());
+                
                 Image dimg = img.getScaledInstance(jLabelOriginalImage.getWidth(), jLabelOriginalImage.getHeight(),
                         Image.SCALE_SMOOTH);
                 immagine = new ImageIcon(dimg);
@@ -294,16 +329,48 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonPathImageActionPerformed
 
     private void jButtonAmpiezzaPiuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAmpiezzaPiuActionPerformed
-        // TODO add your handling code here:
+         jTextFieldAmpiezza.setText(Integer.toString(Integer.parseInt(jTextFieldAmpiezza.getText())+1));
     }//GEN-LAST:event_jButtonAmpiezzaPiuActionPerformed
 
     private void jButtonTaglioPiuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTaglioPiuActionPerformed
-        // TODO add your handling code here:
+        if(Integer.parseInt(jTextFieldTaglio.getText()) < ((2 * (Integer.parseInt(jTextFieldAmpiezza.getText()))) - 2)){
+            jTextFieldTaglio.setText(Integer.toString(Integer.parseInt(jTextFieldTaglio.getText())+1));
+        }
     }//GEN-LAST:event_jButtonTaglioPiuActionPerformed
 
     private void jButtonElaboraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonElaboraActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_jButtonElaboraActionPerformed
+
+    private void CheckAmpiezza(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_CheckAmpiezza
+        char enter = evt.getKeyChar();
+        if(!(Character.isDigit(enter))){
+            evt.consume();
+        }
+    }//GEN-LAST:event_CheckAmpiezza
+
+    private void jButtonAmpiezzaMenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAmpiezzaMenoActionPerformed
+        if(Integer.parseInt(jTextFieldAmpiezza.getText()) > 0){
+            jTextFieldAmpiezza.setText(Integer.toString(Integer.parseInt(jTextFieldAmpiezza.getText())-1));
+        }
+    }//GEN-LAST:event_jButtonAmpiezzaMenoActionPerformed
+
+    private void jTextFieldTaglioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTaglioActionPerformed
+        
+    }//GEN-LAST:event_jTextFieldTaglioActionPerformed
+
+    private void jButtonTaglioMenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTaglioMenoActionPerformed
+        if(Integer.parseInt(jTextFieldTaglio.getText()) > 0){
+            jTextFieldTaglio.setText(Integer.toString(Integer.parseInt(jTextFieldTaglio.getText())-1));
+        }
+    }//GEN-LAST:event_jButtonTaglioMenoActionPerformed
+
+    private void checkTaglio(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_checkTaglio
+        char enter = evt.getKeyChar();
+        if(!(Character.isDigit(enter))){
+            evt.consume();
+        }
+    }//GEN-LAST:event_checkTaglio
 
     /**
      * @param args the command line arguments
