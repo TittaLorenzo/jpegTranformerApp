@@ -4,8 +4,13 @@
  */
 package com.mycompany.jpegtransformerappv1;
 
+import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -13,6 +18,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.jtransforms.dct.DoubleDCT_2D;
 
 /**
  *
@@ -47,7 +53,7 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
         jLabelOriginalImageText = new javax.swing.JLabel();
         jLabelModifiedImageText = new javax.swing.JLabel();
         jLabelOriginalImage = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        jLabelModifiedImage = new javax.swing.JLabel();
         jPanelControl = new javax.swing.JPanel();
         jLabelAmpiezza = new javax.swing.JLabel();
         jTextFieldAmpiezza = new javax.swing.JTextField();
@@ -132,7 +138,7 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelImageLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(jLabelModifiedImage, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         jPanelImageLayout.setVerticalGroup(
@@ -146,7 +152,7 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
                     .addComponent(jLabelModifiedImageText))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                    .addComponent(jLabelModifiedImage, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                     .addComponent(jLabelOriginalImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
@@ -314,16 +320,12 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
                     img = ImageIO.read(new File(imagePath));
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
-                
-                int n = Integer.parseInt(jTextFieldAmpiezza.getText());
-                
+                }   
                 Image dimg = img.getScaledInstance(jLabelOriginalImage.getWidth(), jLabelOriginalImage.getHeight(),
                         Image.SCALE_SMOOTH);
                 immagine = new ImageIcon(dimg);
                 jLabelOriginalImage.setIcon(immagine);
                 jTextFieldPathImage.setText(imagePath);
-                //System.out.println(file);
             }
         }
     }//GEN-LAST:event_jButtonPathImageActionPerformed
@@ -339,7 +341,47 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonTaglioPiuActionPerformed
 
     private void jButtonElaboraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonElaboraActionPerformed
-        
+        if(imagePath != null){
+            BufferedImage img = null;
+            try {
+                    img = ImageIO.read(new File(imagePath));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } 
+            int n = Integer.parseInt(jTextFieldAmpiezza.getText());
+            for (int i = 0; i < img.getWidth(); i += n) {
+                for (int j = 0; j < img.getHeight(); j += n) {
+                    int w = Integer.min(n, img.getWidth() - i);
+                    int h = Integer.min(n, img.getHeight() - j);                   
+                    Raster r = img.getData(new Rectangle(new Point(i, j), new Dimension(w, h)));
+                    DoubleDCT_2D dct = new DoubleDCT_2D(h, w);
+                    double[] f = r.getPixels(i, j, w, h, new double[w*h]);
+                    dct.forward(f, true);
+                    for (int t = 0; t < f.length; t++) {
+                        int k = t / w;
+                        int l = t % w;
+                        if (k + l >= Integer.parseInt(jTextFieldTaglio.getText())) {
+                            f[t] = 0;
+                        }
+                    }
+                    dct.inverse(f, true);
+                    for(int k = 0; k < f.length; k++)
+                    {
+                        f[k] = (int)f[k];
+                        f[k] = Double.min(f[k], 255);
+                        f[k] = Double.max(f[k], 0);
+                    }
+                    WritableRaster wr = r.createCompatibleWritableRaster(i, j, w, h);
+                    wr.setPixels(i, j, w, h, f);                  
+                    img.setData(wr);
+                }
+            }
+            
+            Image dimg = img.getScaledInstance(jLabelModifiedImage.getWidth(), jLabelModifiedImage.getHeight(),
+                        Image.SCALE_SMOOTH);
+            immagine = new ImageIcon(dimg);
+            jLabelModifiedImage.setIcon(immagine);
+        }
     }//GEN-LAST:event_jButtonElaboraActionPerformed
 
     private void CheckAmpiezza(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_CheckAmpiezza
@@ -415,8 +457,8 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
     private javax.swing.JButton jButtonPathImage;
     private javax.swing.JButton jButtonTaglioMeno;
     private javax.swing.JButton jButtonTaglioPiu;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelAmpiezza;
+    private javax.swing.JLabel jLabelModifiedImage;
     private javax.swing.JLabel jLabelModifiedImageText;
     private javax.swing.JLabel jLabelOriginalImage;
     private javax.swing.JLabel jLabelOriginalImageText;
