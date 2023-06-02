@@ -64,18 +64,22 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
         jButtonTaglioMeno = new javax.swing.JButton();
         jButtonTaglioPiu = new javax.swing.JButton();
         jButtonElabora = new javax.swing.JButton();
+        jLabelTitoloElaborazione = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Jpeg Transformer App");
-        setBackground(new java.awt.Color(255, 204, 102));
+        setBackground(new java.awt.Color(204, 204, 255));
 
-        jPanelImage.setBackground(new java.awt.Color(255, 204, 153));
+        jPanelImage.setBackground(new java.awt.Color(204, 204, 255));
 
-        jPanelPathImage.setBackground(new java.awt.Color(207, 200, 182));
+        jPanelPathImage.setBackground(new java.awt.Color(241, 202, 231));
+        jPanelPathImage.setFont(new java.awt.Font("Microsoft YaHei UI", 0, 12)); // NOI18N
 
-        jLabelPathImage.setText("Scegli l'immagine (.bmp) da elaborare:");
+        jLabelPathImage.setFont(new java.awt.Font("Calisto MT", 1, 18)); // NOI18N
+        jLabelPathImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelPathImage.setText("Segli l'immagine (.bmp) da elaborare");
 
-        jButtonPathImage.setText("Browse");
+        jButtonPathImage.setText("BROWSE");
         jButtonPathImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonPathImageActionPerformed(evt);
@@ -95,8 +99,8 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
             jPanelPathImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelPathImageLayout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addGroup(jPanelPathImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelPathImage)
+                .addGroup(jPanelPathImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabelPathImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanelPathImageLayout.createSequentialGroup()
                         .addComponent(jButtonPathImage)
                         .addGap(18, 18, 18)
@@ -109,14 +113,20 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabelPathImage)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanelPathImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonPathImage)
-                    .addComponent(jTextFieldPathImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addGroup(jPanelPathImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextFieldPathImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanelPathImageLayout.createSequentialGroup()
+                        .addComponent(jButtonPathImage, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGap(1, 1, 1)))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
+        jLabelOriginalImageText.setFont(new java.awt.Font("Calisto MT", 1, 12)); // NOI18N
+        jLabelOriginalImageText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelOriginalImageText.setText("Immagine originale:");
 
+        jLabelModifiedImageText.setFont(new java.awt.Font("Calisto MT", 1, 12)); // NOI18N
+        jLabelModifiedImageText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelModifiedImageText.setText("Immagine modificata:");
 
         javax.swing.GroupLayout jPanelImageLayout = new javax.swing.GroupLayout(jPanelImage);
@@ -128,17 +138,13 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
                 .addGroup(jPanelImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanelPathImage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanelImageLayout.createSequentialGroup()
-                        .addGroup(jPanelImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelOriginalImageText)
-                            .addComponent(jLabelOriginalImage, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanelImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanelImageLayout.createSequentialGroup()
-                                .addGap(63, 63, 63)
-                                .addComponent(jLabelModifiedImageText)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelImageLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabelModifiedImage, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGroup(jPanelImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabelOriginalImage, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                            .addComponent(jLabelOriginalImageText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanelImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabelModifiedImage, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                            .addComponent(jLabelModifiedImageText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanelImageLayout.setVerticalGroup(
@@ -154,13 +160,15 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
                 .addGroup(jPanelImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabelModifiedImage, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                     .addComponent(jLabelOriginalImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
-        jPanelControl.setBackground(new java.awt.Color(255, 204, 153));
+        jPanelControl.setBackground(new java.awt.Color(204, 204, 255));
         jPanelControl.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanelControl.setName(""); // NOI18N
 
+        jLabelAmpiezza.setFont(new java.awt.Font("Calisto MT", 1, 12)); // NOI18N
+        jLabelAmpiezza.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelAmpiezza.setText("Scegliere ampiezza finestra:");
 
         jTextFieldAmpiezza.setText("1");
@@ -187,6 +195,8 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
             }
         });
 
+        jLabelTaglio.setFont(new java.awt.Font("Calisto MT", 1, 12)); // NOI18N
+        jLabelTaglio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTaglio.setText("Scegliere taglio frequenza:");
 
         jTextFieldTaglio.setText("0");
@@ -217,59 +227,70 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
             }
         });
 
-        jButtonElabora.setText("Elaborazione");
+        jButtonElabora.setText("ELABORAZIONE");
         jButtonElabora.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonElaboraActionPerformed(evt);
             }
         });
 
+        jLabelTitoloElaborazione.setFont(new java.awt.Font("Calisto MT", 1, 14)); // NOI18N
+        jLabelTitoloElaborazione.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelTitoloElaborazione.setText("PARAMETRI");
+
         javax.swing.GroupLayout jPanelControlLayout = new javax.swing.GroupLayout(jPanelControl);
         jPanelControl.setLayout(jPanelControlLayout);
         jPanelControlLayout.setHorizontalGroup(
             jPanelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelControlLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelControlLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelAmpiezza)
-                            .addGroup(jPanelControlLayout.createSequentialGroup()
-                                .addComponent(jTextFieldAmpiezza, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonAmpiezzaMeno)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonAmpiezzaPiu))
-                            .addComponent(jLabelTaglio)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelControlLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButtonElabora)
                             .addGroup(jPanelControlLayout.createSequentialGroup()
                                 .addComponent(jTextFieldTaglio, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonTaglioMeno)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonTaglioPiu))))
-                    .addGroup(jPanelControlLayout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(jButtonElabora)))
-                .addContainerGap(124, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addComponent(jButtonTaglioMeno)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonTaglioPiu)
+                        .addGap(64, 64, 64))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelControlLayout.createSequentialGroup()
+                        .addGroup(jPanelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabelTitoloElaborazione, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabelAmpiezza, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabelTaglio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanelControlLayout.createSequentialGroup()
+                                .addGap(0, 45, Short.MAX_VALUE)
+                                .addComponent(jTextFieldAmpiezza, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButtonAmpiezzaMeno)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonAmpiezzaPiu)
+                                .addGap(58, 58, 58)))
+                        .addContainerGap())))
         );
         jPanelControlLayout.setVerticalGroup(
             jPanelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelControlLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(42, 42, 42)
+                .addComponent(jLabelTitoloElaborazione)
+                .addGap(33, 33, 33)
                 .addComponent(jLabelAmpiezza)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldAmpiezza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonAmpiezzaMeno)
                     .addComponent(jButtonAmpiezzaPiu))
-                .addGap(42, 42, 42)
+                .addGap(30, 30, 30)
                 .addComponent(jLabelTaglio)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldTaglio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonTaglioMeno)
                     .addComponent(jButtonTaglioPiu))
-                .addGap(58, 58, 58)
+                .addGap(53, 53, 53)
                 .addComponent(jButtonElabora)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -355,7 +376,7 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
                     int h = Integer.min(n, img.getHeight() - j);                   
                     Raster r = img.getData(new Rectangle(new Point(i, j), new Dimension(w, h)));
                     DoubleDCT_2D dct = new DoubleDCT_2D(h, w);
-                    double[] f = r.getPixels(i, j, w, h, new double[w*h]);
+                    double[] f = r.getPixels(i, j, w, h, (double[])null);
                     dct.forward(f, true);
                     for (int t = 0; t < f.length; t++) {
                         int k = t / w;
@@ -464,6 +485,7 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelOriginalImageText;
     private javax.swing.JLabel jLabelPathImage;
     private javax.swing.JLabel jLabelTaglio;
+    private javax.swing.JLabel jLabelTitoloElaborazione;
     private javax.swing.JPanel jPanelControl;
     private javax.swing.JPanel jPanelImage;
     private javax.swing.JPanel jPanelPathImage;
