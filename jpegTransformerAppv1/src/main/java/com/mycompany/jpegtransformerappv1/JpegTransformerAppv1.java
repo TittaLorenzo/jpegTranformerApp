@@ -370,30 +370,56 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
                     e.printStackTrace();
                 } 
             int n = Integer.parseInt(jTextFieldAmpiezza.getText());
+            if(n > img.getHeight() || n > img.getWidth()){
+                n = Integer.min(img.getHeight(), img.getWidth());
+                jTextFieldAmpiezza.setText(Integer.toString(n));
+            }
+            int taglio = Integer.parseInt(jTextFieldTaglio.getText());
+            if(taglio < 0){
+                taglio = 0;
+                jTextFieldTaglio.setText("0");
+            }
+            if(taglio > 2*n-2){
+                taglio = 2*n-2;
+                jTextFieldTaglio.setText(Integer.toString(2*n-2));
+            }
             for (int i = 0; i < img.getWidth(); i += n) {
                 for (int j = 0; j < img.getHeight(); j += n) {
                     int w = Integer.min(n, img.getWidth() - i);
                     int h = Integer.min(n, img.getHeight() - j);                   
                     Raster r = img.getData(new Rectangle(new Point(i, j), new Dimension(w, h)));
                     DoubleDCT_2D dct = new DoubleDCT_2D(h, w);
-                    double[] f = r.getPixels(i, j, w, h, (double[])null);
-                    dct.forward(f, true);
-                    for (int t = 0; t < f.length; t++) {
-                        int k = t / w;
-                        int l = t % w;
-                        if (k + l >= Integer.parseInt(jTextFieldTaglio.getText())) {
-                            f[t] = 0;
+                    double[][] f = new double[r.getNumBands()][w*h];
+                    for(int b = 0; b < r.getNumBands(); b++){
+                        f[b] = r.getSamples(i, j, w, h, b, (double[])null);
+                    }
+                    for(int b = 0; b < r.getNumBands(); b++){
+                        dct.forward(f[b], true);
+                    }
+                    for(int b = 0; b < r.getNumBands(); b++){
+                        for (int t = 0; t < f[b].length; t++) {
+                            int k = t / w;
+                            int l = t % w;
+                            if (k + l >= taglio) {
+                                f[b][t] = 0;
+                            }
                         }
                     }
-                    dct.inverse(f, true);
-                    for(int k = 0; k < f.length; k++)
-                    {
-                        f[k] = (int)f[k];
-                        f[k] = Double.min(f[k], 255);
-                        f[k] = Double.max(f[k], 0);
+                    for(int b = 0; b < r.getNumBands(); b++){
+                        dct.inverse(f[b], true);
+                    }
+                    for(int b = 0; b < r.getNumBands(); b++){
+                        for(int k = 0; k < f[b].length; k++)
+                        {
+                            f[b][k] = (int)f[b][k];
+                            f[b][k] = Double.min(f[b][k], 255);
+                            f[b][k] = Double.max(f[b][k], 0);
+                        }
                     }
                     WritableRaster wr = r.createCompatibleWritableRaster(i, j, w, h);
-                    wr.setPixels(i, j, w, h, f);                  
+                    for(int b = 0; b < r.getNumBands(); b++){
+                        wr.setSamples(i, j, w, h, b, f[b]);
+                    }            
                     img.setData(wr);
                 }
             }
