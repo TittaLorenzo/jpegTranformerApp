@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -27,7 +28,9 @@ import org.jtransforms.dct.DoubleDCT_2D;
 public class JpegTransformerAppv1 extends javax.swing.JFrame {
 
     public String imagePath;
-    public ImageIcon immagine = new ImageIcon("");
+
+    public BufferedImage img = null;
+    public BufferedImage imgOriginal = null;
 
     /**
      * Creates new form JpegTransformerApp
@@ -52,6 +55,7 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
         jTextFieldPathImage = new javax.swing.JTextField();
         jLabelOriginalImageText = new javax.swing.JLabel();
         jLabelModifiedImageText = new javax.swing.JLabel();
+        jDesktopPane1 = new javax.swing.JDesktopPane();
         jLabelOriginalImage = new javax.swing.JLabel();
         jLabelModifiedImage = new javax.swing.JLabel();
         jPanelControl = new javax.swing.JPanel();
@@ -105,7 +109,7 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
                         .addComponent(jButtonPathImage)
                         .addGap(18, 18, 18)
                         .addComponent(jTextFieldPathImage, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanelPathImageLayout.setVerticalGroup(
             jPanelPathImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -129,6 +133,42 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
         jLabelModifiedImageText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelModifiedImageText.setText("Immagine modificata:");
 
+        jDesktopPane1.setOpaque(false);
+        jDesktopPane1.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                reSize(evt);
+            }
+        });
+
+        jLabelOriginalImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelOriginalImage.setFocusTraversalPolicyProvider(true);
+
+        jLabelModifiedImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        jDesktopPane1.setLayer(jLabelOriginalImage, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabelModifiedImage, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
+        jDesktopPane1.setLayout(jDesktopPane1Layout);
+        jDesktopPane1Layout.setHorizontalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabelOriginalImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelModifiedImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jDesktopPane1Layout.setVerticalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabelOriginalImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelModifiedImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout jPanelImageLayout = new javax.swing.GroupLayout(jPanelImage);
         jPanelImage.setLayout(jPanelImageLayout);
         jPanelImageLayout.setHorizontalGroup(
@@ -136,15 +176,14 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
             .addGroup(jPanelImageLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanelPathImage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanelPathImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanelImageLayout.createSequentialGroup()
-                        .addGroup(jPanelImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabelOriginalImage, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                            .addComponent(jLabelOriginalImageText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanelImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabelModifiedImage, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                            .addComponent(jLabelModifiedImageText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jLabelOriginalImageText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelModifiedImageText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanelImageLayout.createSequentialGroup()
+                        .addComponent(jDesktopPane1)
+                        .addGap(0, 0, 0)))
                 .addContainerGap())
         );
         jPanelImageLayout.setVerticalGroup(
@@ -156,11 +195,9 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
                 .addGroup(jPanelImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelOriginalImageText)
                     .addComponent(jLabelModifiedImageText))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabelModifiedImage, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                    .addComponent(jLabelOriginalImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jDesktopPane1)
+                .addGap(5, 5, 5))
         );
 
         jPanelControl.setBackground(new java.awt.Color(204, 204, 255));
@@ -248,11 +285,11 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelControlLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButtonElabora)
                             .addGroup(jPanelControlLayout.createSequentialGroup()
                                 .addComponent(jTextFieldTaglio, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButtonTaglioMeno)))
+                                .addComponent(jButtonTaglioMeno))
+                            .addComponent(jButtonElabora))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonTaglioPiu)
                         .addGap(64, 64, 64))
@@ -292,7 +329,7 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
                     .addComponent(jButtonTaglioPiu))
                 .addGap(53, 53, 53)
                 .addComponent(jButtonElabora)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(149, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -310,46 +347,13 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanelControl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanelImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanelControl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(jPanelImage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jTextFieldPathImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldPathImageActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldPathImageActionPerformed
-
-    private void jButtonPathImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPathImageActionPerformed
-        if (evt.getSource() == jButtonPathImage) {
-            //codice che inserisce immagine nel textfield e nella variabile imagePath
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setCurrentDirectory(new File("."));
-            FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "BMP Images", "bmp");
-            fileChooser.setFileFilter(filter);
-            int response = fileChooser.showOpenDialog(null);
-            if (response == JFileChooser.APPROVE_OPTION) {
-                imagePath = fileChooser.getSelectedFile().getAbsolutePath();
-                File file = new File(imagePath);
-                //resize dell'immagine
-                BufferedImage img = null;
-                try {
-                    img = ImageIO.read(new File(imagePath));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }   
-                Image dimg = img.getScaledInstance(jLabelOriginalImage.getWidth(), jLabelOriginalImage.getHeight(),
-                        Image.SCALE_SMOOTH);
-                immagine = new ImageIcon(dimg);
-                jLabelOriginalImage.setIcon(immagine);
-                jTextFieldPathImage.setText(imagePath);
-            }
-        }
-    }//GEN-LAST:event_jButtonPathImageActionPerformed
 
     private void jButtonAmpiezzaPiuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAmpiezzaPiuActionPerformed
          jTextFieldAmpiezza.setText(Integer.toString(Integer.parseInt(jTextFieldAmpiezza.getText())+1));
@@ -363,12 +367,13 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
 
     private void jButtonElaboraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonElaboraActionPerformed
         if(imagePath != null){
-            BufferedImage img = null;
+            img = null;
             try {
                     img = ImageIO.read(new File(imagePath));
+                    imgOriginal = ImageIO.read(new File(imagePath));;
                 } catch (IOException e) {
                     e.printStackTrace();
-                } 
+                }           
             int n = Integer.parseInt(jTextFieldAmpiezza.getText());
             if(n > img.getHeight() || n > img.getWidth()){
                 n = Integer.min(img.getHeight(), img.getWidth());
@@ -386,51 +391,61 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
             for (int i = 0; i < img.getWidth(); i += n) {
                 for (int j = 0; j < img.getHeight(); j += n) {
                     int w = Integer.min(n, img.getWidth() - i);
-                    int h = Integer.min(n, img.getHeight() - j);                   
-                    Raster r = img.getData(new Rectangle(new Point(i, j), new Dimension(w, h)));
-                    DoubleDCT_2D dct = new DoubleDCT_2D(h, w);
-                    double[][] f = new double[r.getNumBands()][w*h];
-                    for(int b = 0; b < r.getNumBands(); b++){
-                        f[b] = r.getSamples(i, j, w, h, b, (double[])null);
-                    }
-                    for(int b = 0; b < r.getNumBands(); b++){
-                        dct.forward(f[b], true);
-                    }
-                    for(int b = 0; b < r.getNumBands(); b++){
-                        for (int t = 0; t < f[b].length; t++) {
-                            int k = t / w;
-                            int l = t % w;
-                            if (k + l >= taglio) {
-                                f[b][t] = 0;
+                    int h = Integer.min(n, img.getHeight() - j);  
+                    if(w != 1 && h != 1){                                       
+                        Raster r = img.getData(new Rectangle(new Point(i, j), new Dimension(w, h)));
+                        DoubleDCT_2D dct = new DoubleDCT_2D(h, w);
+                        double[][] f = new double[r.getNumBands()][w*h];
+                        for(int b = 0; b < r.getNumBands(); b++){
+                            f[b] = r.getSamples(i, j, w, h, b, (double[])null);
+                        }
+                        for(int b = 0; b < r.getNumBands(); b++){
+                            dct.forward(f[b], true);
+                        }
+                        for(int b = 0; b < r.getNumBands(); b++){
+                            for (int t = 0; t < f[b].length; t++) {
+                                int k = t / w;
+                                int l = t % w;
+                                if (k + l >= taglio) {
+                                    f[b][t] = 0;
+                                }
                             }
                         }
-                    }
-                    for(int b = 0; b < r.getNumBands(); b++){
-                        dct.inverse(f[b], true);
-                    }
-                    for(int b = 0; b < r.getNumBands(); b++){
-                        for(int k = 0; k < f[b].length; k++)
-                        {
-                            f[b][k] = (int)f[b][k];
-                            f[b][k] = Double.min(f[b][k], 255);
-                            f[b][k] = Double.max(f[b][k], 0);
+                        for(int b = 0; b < r.getNumBands(); b++){
+                            dct.inverse(f[b], true);
                         }
+                        for(int b = 0; b < r.getNumBands(); b++){
+                            for(int k = 0; k < f[b].length; k++)
+                            {
+                                f[b][k] = (int)f[b][k];
+                                f[b][k] = Double.min(f[b][k], 255);
+                                f[b][k] = Double.max(f[b][k], 0);
+                            }
+                        }
+                        WritableRaster wr = r.createCompatibleWritableRaster(i, j, w, h);
+                        for(int b = 0; b < r.getNumBands(); b++){
+                            wr.setSamples(i, j, w, h, b, f[b]);
+                        }            
+                        img.setData(wr);
                     }
-                    WritableRaster wr = r.createCompatibleWritableRaster(i, j, w, h);
-                    for(int b = 0; b < r.getNumBands(); b++){
-                        wr.setSamples(i, j, w, h, b, f[b]);
-                    }            
-                    img.setData(wr);
                 }
             }
             
-            Image dimg = img.getScaledInstance(jLabelModifiedImage.getWidth(), jLabelModifiedImage.getHeight(),
-                        Image.SCALE_SMOOTH);
-            immagine = new ImageIcon(dimg);
-            jLabelModifiedImage.setIcon(immagine);
+            if(img.getWidth() > img.getHeight()){
+                Image imageM = img.getScaledInstance(jLabelModifiedImage.getWidth(), -1,
+                    Image.SCALE_SMOOTH);
+                ImageIcon immagineM = new ImageIcon(imageM);
+                jLabelModifiedImage.setIcon(immagineM);
+            }
+            else{
+                Image imageM = img.getScaledInstance(-1, jLabelModifiedImage.getHeight(),
+                    Image.SCALE_SMOOTH);
+                ImageIcon immagineM = new ImageIcon(imageM);
+                jLabelModifiedImage.setIcon(immagineM);
+            }
         }
     }//GEN-LAST:event_jButtonElaboraActionPerformed
-
+    
     private void CheckAmpiezza(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_CheckAmpiezza
         char enter = evt.getKeyChar();
         if(!(Character.isDigit(enter))){
@@ -460,6 +475,77 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_checkTaglio
+
+    private void reSize(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_reSize
+        if(img != null){
+            if(img.getWidth() > img.getHeight()){
+                Image imageM = img.getScaledInstance(jDesktopPane1.getWidth()/2, -1,
+                    Image.SCALE_SMOOTH);
+                ImageIcon immagineM = new ImageIcon(imageM);
+                jLabelModifiedImage.setIcon(immagineM);
+            }
+            else{
+                Image imageM = img.getScaledInstance(-1, jDesktopPane1.getHeight(),
+                    Image.SCALE_SMOOTH);
+                ImageIcon immagineM = new ImageIcon(imageM);
+                jLabelModifiedImage.setIcon(immagineM);
+            }
+        }
+        if(imgOriginal != null){
+            if(imgOriginal.getWidth() > imgOriginal.getHeight()){
+                Image imageO = imgOriginal.getScaledInstance(jDesktopPane1.getWidth()/2, -1,
+                    Image.SCALE_SMOOTH);
+                ImageIcon immagineO = new ImageIcon(imageO);
+                jLabelOriginalImage.setIcon(immagineO);
+            }
+            else{
+                Image imageO = imgOriginal.getScaledInstance(-1, jDesktopPane1.getHeight(),
+                    Image.SCALE_SMOOTH);
+                ImageIcon immagineO = new ImageIcon(imageO);
+                jLabelOriginalImage.setIcon(immagineO);
+            }
+        }
+    }//GEN-LAST:event_reSize
+
+    private void jTextFieldPathImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldPathImageActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldPathImageActionPerformed
+
+    private void jButtonPathImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPathImageActionPerformed
+        if (evt.getSource() == jButtonPathImage) {
+            //codice che inserisce immagine nel textfield e nella variabile imagePath
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File("."));
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "BMP Images", "bmp");
+            fileChooser.setFileFilter(filter);
+            int response = fileChooser.showOpenDialog(null);
+            if (response == JFileChooser.APPROVE_OPTION) {
+                imagePath = fileChooser.getSelectedFile().getAbsolutePath();
+                File file = new File(imagePath);
+                //resize dell'immagine
+                BufferedImage img = null;
+                try {
+                    img = ImageIO.read(new File(imagePath));
+                    imgOriginal = ImageIO.read(new File(imagePath));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if(img.getWidth() > img.getHeight()){
+                    Image imageO = img.getScaledInstance(jLabelOriginalImage.getWidth(), -1,
+                        Image.SCALE_SMOOTH);
+                    ImageIcon immagineO = new ImageIcon(imageO);
+                    jLabelOriginalImage.setIcon(immagineO);
+                }
+                else{
+                    Image imageO = img.getScaledInstance(-1, jLabelOriginalImage.getHeight(),
+                        Image.SCALE_SMOOTH);
+                    ImageIcon immagineO = new ImageIcon(imageO);
+                    jLabelOriginalImage.setIcon(immagineO);
+                }
+            }
+        }
+    }//GEN-LAST:event_jButtonPathImageActionPerformed
 
     /**
      * @param args the command line arguments
@@ -504,6 +590,7 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
     private javax.swing.JButton jButtonPathImage;
     private javax.swing.JButton jButtonTaglioMeno;
     private javax.swing.JButton jButtonTaglioPiu;
+    private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabelAmpiezza;
     private javax.swing.JLabel jLabelModifiedImage;
     private javax.swing.JLabel jLabelModifiedImageText;
