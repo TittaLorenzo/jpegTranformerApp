@@ -522,6 +522,7 @@ public class JpegTransformerAppv1 extends javax.swing.JFrame {
             int response = fileChooser.showOpenDialog(null);
             if (response == JFileChooser.APPROVE_OPTION) {
                 imagePath = fileChooser.getSelectedFile().getAbsolutePath();
+                jTextFieldPathImage.setText(imagePath);
                 File file = new File(imagePath);
                 //resize dell'immagine
                 BufferedImage img = null;
